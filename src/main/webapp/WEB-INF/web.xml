@@ -11,9 +11,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <res-auth>Container</res-auth>
     </resource-ref>
 
-<servlet>
+<!--<servlet>
     <servlet-name>GroceryListController</servlet-name>
-    <servlet-class>Controllers.GroceryControllers.GroceryListController</servlet-class>
+    <servlet-class>OldControllers.GroceryControllers.GroceryListController</servlet-class>
 </servlet>
 <servlet-mapping>
     <servlet-name>GroceryListController</servlet-name>
@@ -21,7 +21,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 </servlet-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>Controllers.AccountControllers.Login</servlet-class>
+        <servlet-class>OldControllers.AccountControllers.Login</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -29,7 +29,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>Signin</servlet-name>
-        <servlet-class>Controllers.AccountControllers.Signin</servlet-class>
+        <servlet-class>OldControllers.AccountControllers.Signin</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Signin</servlet-name>
@@ -37,7 +37,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>GroceryListAdmin</servlet-name>
-        <servlet-class>Controllers.GroceryControllers.GroceryListAdmin</servlet-class>
+        <servlet-class>OldControllers.GroceryControllers.GroceryListAdmin</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GroceryListAdmin</servlet-name>
@@ -45,7 +45,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>Controllers.AccountControllers.Logout</servlet-class>
+        <servlet-class>OldControllers.AccountControllers.Logout</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -53,7 +53,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>CartAdd</servlet-name>
-        <servlet-class>Controllers.CartController.CartAdd</servlet-class>
+        <servlet-class>OldControllers.CartController.CartAdd</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CartAdd</servlet-name>
@@ -61,7 +61,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>CartList</servlet-name>
-        <servlet-class>Controllers.CartController.CartList</servlet-class>
+        <servlet-class>OldControllers.CartController.CartList</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CartList</servlet-name>
@@ -69,7 +69,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>CartRemove</servlet-name>
-        <servlet-class>Controllers.CartController.CartRemove</servlet-class>
+        <servlet-class>OldControllers.CartController.CartRemove</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CartRemove</servlet-name>
@@ -77,7 +77,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>OrderAdd</servlet-name>
-        <servlet-class>Controllers.OrderControllers.OrderAdd</servlet-class>
+        <servlet-class>OldControllers.OrderControllers.OrderAdd</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OrderAdd</servlet-name>
@@ -85,7 +85,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>OrderEdit</servlet-name>
-        <servlet-class>Controllers.OrderControllers.OrderEdit</servlet-class>
+        <servlet-class>OldControllers.OrderControllers.OrderEdit</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OrderEdit</servlet-name>
@@ -93,7 +93,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>OrderList</servlet-name>
-        <servlet-class>Controllers.OrderControllers.OrderList</servlet-class>
+        <servlet-class>OldControllers.OrderControllers.OrderList</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OrderList</servlet-name>
@@ -101,7 +101,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>OrderListAdmin</servlet-name>
-        <servlet-class>Controllers.OrderControllers.OrderListAdmin</servlet-class>
+        <servlet-class>OldControllers.OrderControllers.OrderListAdmin</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>OrderListAdmin</servlet-name>
@@ -109,7 +109,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>GroceryAdd</servlet-name>
-        <servlet-class>Controllers.GroceryControllers.GroceryAdd</servlet-class>
+        <servlet-class>OldControllers.GroceryControllers.GroceryAdd</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GroceryAdd</servlet-name>
@@ -117,7 +117,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>GroceryEdit</servlet-name>
-        <servlet-class>Controllers.GroceryControllers.GroceryEdit</servlet-class>
+        <servlet-class>OldControllers.GroceryControllers.GroceryEdit</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GroceryEdit</servlet-name>
@@ -125,7 +125,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>GroceryDel</servlet-name>
-        <servlet-class>Controllers.GroceryControllers.GroceryDel</servlet-class>
+        <servlet-class>OldControllers.GroceryControllers.GroceryDel</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GroceryDel</servlet-name>
@@ -133,18 +133,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>MappingError</servlet-name>
-        <servlet-class>Controllers.MappingError</servlet-class>
+        <servlet-class>grocerystore.Controllers.MappingError</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MappingError</servlet-name>
         <url-pattern>/</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
 
 
     <filter>
         <filter-name>AuthorizationFilter</filter-name>
-        <filter-class>Filters.AuthorizationFilter</filter-class>
+        <filter-class>grocerystore.Filters.AuthorizationFilter</filter-class>
         <init-param>
             <param-name>test-param</param-name>
             <param-value>This parameter is for testing.</param-value>
@@ -152,11 +152,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </filter>
     <filter>
         <filter-name>AdminFilter</filter-name>
-        <filter-class>Filters.AdminFilter</filter-class>
-  <!--      <init-param>
-            <param-name>test-param</param-name>
-            <param-value>This parameter is for testing.</param-value>
-        </init-param>-->
+        <filter-class>grocerystore.Filters.AdminFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>AuthorizationFilter</filter-name>
@@ -181,13 +177,37 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/OrderEdit</url-pattern>
         <url-pattern>/OrderListAdmin</url-pattern>
     </filter-mapping>
-  <!--  <filter>
-        <filter-name>AuthorizationFilter</filter-name>
-        <filter-class>Filters.AuthorizationFilter</filter-class>
-    </filter>
 
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
     <filter-mapping>
-        <filter-name>AuthorizationFilter</filter-name>
-        <url-pattern>/grocerylist*.jsp</url-pattern>
-    </filter-mapping>-->
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <servlet>
+        <servlet-name>grocerystore</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>grocerystore</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>/WEB-INF/jsp/index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
