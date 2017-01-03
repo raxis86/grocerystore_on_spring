@@ -20,13 +20,13 @@ import static grocerystore.Constants.Constants.*;
  * Реализакция DAO для работы с grocery в MySQL
  */
 @Component
-public class GrocerySql implements IRepositoryGrocery {
+public class GrocerySql extends SQLImplementation implements IRepositoryGrocery {
     private static final Logger logger = LoggerFactory.getLogger(GrocerySql.class);
 
     @Override
     public List<Grocery> getAll() throws GroceryException {
         List<Grocery> groceryList = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(GROCERY_SELECTALL_QUERY);) {
             while (resultSet.next()){
@@ -49,7 +49,7 @@ public class GrocerySql implements IRepositoryGrocery {
     @Override
     public Grocery getOne(UUID id) throws GroceryException {
         Grocery grocery = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERY_PREP_SELECTONE_QUERY);) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
@@ -72,7 +72,7 @@ public class GrocerySql implements IRepositoryGrocery {
 
     @Override
     public boolean create(Grocery entity) throws GroceryException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERY_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getParentid().toString());
@@ -90,7 +90,7 @@ public class GrocerySql implements IRepositoryGrocery {
 
     @Override
     public boolean delete(UUID id) throws GroceryException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERY_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
@@ -103,7 +103,7 @@ public class GrocerySql implements IRepositoryGrocery {
 
     @Override
     public boolean update(Grocery entity) throws GroceryException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement=connection.prepareStatement(GROCERY_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getParentid().toString());
             statement.setObject(2,entity.isIscategory());

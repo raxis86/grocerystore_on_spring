@@ -20,7 +20,7 @@ import static grocerystore.Constants.Constants.*;
  * Реализакция DAO для работы с user в MySQL
  */
 @Component
-public class UserSql implements IRepositoryUser {
+public class UserSql extends SQLImplementation implements IRepositoryUser {
     private static final Logger logger = LoggerFactory.getLogger(UserSql.class);
 
 
@@ -40,7 +40,7 @@ public class UserSql implements IRepositoryUser {
     @Override
     public List<User> getAll() throws UserException {
         List<User> userList = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet=statement.executeQuery(USER_SELECTALL_QUERY);) {
             while (resultSet.next()){
@@ -58,7 +58,7 @@ public class UserSql implements IRepositoryUser {
     @Override
     public User getOne(UUID id) throws UserException {
         User usr = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_QUERY);) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
@@ -76,7 +76,7 @@ public class UserSql implements IRepositoryUser {
 
     @Override
     public boolean create(User entity) throws UserException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getRoleID().toString());
@@ -98,7 +98,7 @@ public class UserSql implements IRepositoryUser {
 
     @Override
     public boolean delete(UUID id) throws UserException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
@@ -111,7 +111,7 @@ public class UserSql implements IRepositoryUser {
 
     @Override
     public boolean update(User entity) throws UserException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement=connection.prepareStatement(USER_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getRoleID().toString());
             statement.setObject(2,entity.getName());
@@ -134,7 +134,7 @@ public class UserSql implements IRepositoryUser {
     @Override
     public User getOne(String email, String passwordHash) throws UserException {
         User usr = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_BY_AUTH_QUERY)) {
             statement.setObject(1,email);
             statement.setObject(2,passwordHash);
@@ -154,7 +154,7 @@ public class UserSql implements IRepositoryUser {
     @Override
     public User getOneByEmail(String email) throws UserException {
         User usr = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_BY_EMAIL_QUERY)) {
             statement.setObject(1,email);
             ResultSet resultSet = statement.executeQuery();

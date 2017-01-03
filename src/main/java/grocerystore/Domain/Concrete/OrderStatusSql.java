@@ -20,13 +20,13 @@ import static grocerystore.Constants.Constants.*;
  * Реализакция DAO для работы с orderstatus в MySQL
  */
 @Component
-public class OrderStatusSql implements IRepositoryOrderStatus {
+public class OrderStatusSql extends SQLImplementation implements IRepositoryOrderStatus {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatusSql.class);
 
     @Override
     public List<OrderStatus> getAll() throws OrderStatusException {
         List<OrderStatus> orderStatusList = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet=statement.executeQuery(ORDERSTATUS_SELECTALL_QUERY);) {
             while (resultSet.next()){
@@ -45,7 +45,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
     @Override
     public OrderStatus getOne(UUID id) throws OrderStatusException {
         OrderStatus orderStatus = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
@@ -64,7 +64,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
 
     @Override
     public boolean create(OrderStatus entity) throws OrderStatusException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getStatus());
@@ -78,7 +78,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
 
     @Override
     public boolean delete(UUID id) throws OrderStatusException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
@@ -91,7 +91,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
 
     @Override
     public boolean update(OrderStatus entity) throws OrderStatusException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement=connection.prepareStatement(ORDERSTATUS_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getStatus());
             statement.setObject(2,entity.getId().toString());

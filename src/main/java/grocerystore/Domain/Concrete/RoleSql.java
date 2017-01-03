@@ -20,13 +20,13 @@ import static grocerystore.Constants.Constants.*;
  * Реализакция DAO для работы с role в MySQL
  */
 @Component
-public class RoleSql implements IRepositoryRole {
+public class RoleSql extends SQLImplementation implements IRepositoryRole {
     private static final Logger logger = LoggerFactory.getLogger(RoleSql.class);
 
     @Override
     public List<Role> getAll() throws RoleException {
         List<Role> roleList = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet=statement.executeQuery(ROLE_SELECTALL_QUERY);) {
             while (resultSet.next()){
@@ -45,7 +45,7 @@ public class RoleSql implements IRepositoryRole {
     @Override
     public Role getOne(UUID id) throws RoleException {
         Role role = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
@@ -65,7 +65,7 @@ public class RoleSql implements IRepositoryRole {
 
     @Override
     public boolean create(Role entity) throws RoleException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getName());
@@ -79,7 +79,7 @@ public class RoleSql implements IRepositoryRole {
 
     @Override
     public boolean delete(UUID id) throws RoleException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
@@ -92,7 +92,7 @@ public class RoleSql implements IRepositoryRole {
 
     @Override
     public boolean update(Role entity) throws RoleException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement=connection.prepareStatement(ROLE_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getName());
             statement.setObject(2,entity.getId().toString());
@@ -107,7 +107,7 @@ public class RoleSql implements IRepositoryRole {
     @Override
     public Role roleByRoleName(String roleName) throws RoleException {
         Role role = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_SELECTONE_BY_NAME_QUERY)) {
             statement.setObject(1,roleName);
             ResultSet resultSet = statement.executeQuery();

@@ -20,7 +20,7 @@ import static grocerystore.Constants.Constants.*;
  * Реализакция DAO для работы с grocerylist в MySQL
  */
 @Component
-public class ListGrocerySql implements IRepositoryListGrocery {
+public class ListGrocerySql extends SQLImplementation implements IRepositoryListGrocery {
     private static final Logger logger = LoggerFactory.getLogger(ListGrocerySql.class);
 
     private void fillGroceryList(ListGrocery listGrocery, ResultSet resultSet) throws SQLException {
@@ -32,7 +32,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
     @Override
     public List<ListGrocery> getAll() throws ListGroceryException {
         List<ListGrocery> listGroceries = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet=statement.executeQuery(GROCERYLIST_SELECTALL_QUERY);) {
             while (resultSet.next()){
@@ -51,7 +51,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
     @Override
     public ListGrocery getOne(UUID id) throws ListGroceryException {
         ListGrocery listGrocery = null;
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
@@ -69,7 +69,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
 
     @Override
     public boolean create(ListGrocery entity) throws ListGroceryException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getGroceryId().toString());
@@ -84,7 +84,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
 
     @Override
     public boolean delete(UUID id) throws ListGroceryException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
@@ -97,7 +97,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
 
     @Override
     public boolean update(ListGrocery entity) throws ListGroceryException {
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement=connection.prepareStatement(GROCERYLIST_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getGroceryId().toString());
             statement.setObject(2,entity.getQuantity());
@@ -113,7 +113,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
     @Override
     public List<ListGrocery> getListById(UUID id) throws ListGroceryException {
         List<ListGrocery> listGroceries = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_SELECTONE_QUERY);) {
             statement.setObject(1,id.toString());
             ResultSet resultSet=statement.executeQuery();
@@ -133,7 +133,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
     @Override
     public List<ListGrocery> getListByGroceryId(UUID id) throws ListGroceryException {
         List<ListGrocery> listGroceries = new ArrayList<>();
-        try(Connection connection = DatabaseManager.getConnection();
+        try(Connection connection = getDs().getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_SELECT_BY_GROCERYID_QUERY);) {
             statement.setObject(1,id.toString());
             ResultSet resultSet=statement.executeQuery();

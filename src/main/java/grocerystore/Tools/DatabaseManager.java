@@ -32,4 +32,8 @@ public class DatabaseManager {
         //ds = (DataSource) ic.lookup("java:comp/env/jdbc/mysqldb");
         return  ds.getConnection();
     }
+
+    public static DataSource getDataSource(){
+        return ds;
+    }
 }
