@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by raxis on 06.01.2017.
  */
-public class AnyServiceFullMessageException extends Exception{
-    private static final Logger logger = LoggerFactory.getLogger(AnyServiceFullMessageException.class);
+public class BusinessLogicException extends Exception{
+    private static final Logger logger = LoggerFactory.getLogger(BusinessLogicException.class);
 
     private Message message;
 
-    public AnyServiceFullMessageException(Message message){
+    public BusinessLogicException(Message message){
         this.message=message;
     }
 

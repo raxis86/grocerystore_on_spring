@@ -1,20 +1,22 @@
-package grocerystore.Controllers;
+package grocerystore.controllers;
 
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Services.Abstract.IGroceryService;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.services.abstracts.IGroceryService;
+import grocerystore.services.exceptions.FormGroceryException;
+import grocerystore.services.exceptions.GroceryServiceException;
+import grocerystore.services.models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.tags.Param;
+
+import java.util.List;
 
 /**
  * Created by raxis on 31.12.2016.
@@ -36,7 +38,7 @@ public class GroceryController {
         try {
             model.addAttribute("groceryList",groceryService.getGroceryList());
             return "grocerylist";
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -47,7 +49,7 @@ public class GroceryController {
         try {
             model.addAttribute("groceryList",groceryService.getGroceryList());
             return "grocerylist_admin";
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -60,18 +62,25 @@ public class GroceryController {
         try {
             groceryService.groceryUpdate(groceryid,name,price,quantity);
             return new ModelAndView("redirect:GroceryListAdmin");
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return new ModelAndView("exception");
+        } catch (FormGroceryException e) {
+              model.addAttribute("messages", e.getExceptionMessage().getMessagesError());
+              model.addAttribute("groceryid",groceryid);
+            return new ModelAndView("redirect:GroceryEdit");
         }
     }
 
     @RequestMapping(value = "GroceryEdit", method = RequestMethod.GET)
-    public String edit(@RequestParam("groceryid") String groceryid,Model model){
+    public String edit(@RequestParam("groceryid") String groceryid,
+                       @RequestParam(value = "messages", required = false) List<String> messages,
+                       Model model){
         try {
             model.addAttribute("grocery",groceryService.getGrocery(groceryid));
+            model.addAttribute("messages",messages);
             return "groceryedit_admin";
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -82,7 +91,7 @@ public class GroceryController {
         try {
             model.addAttribute("grocery",groceryService.getGrocery(groceryid));
             return "grocerydel_admin";
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -93,26 +102,33 @@ public class GroceryController {
         try {
             groceryService.groceryDelete(groceryid);
             return new ModelAndView("redirect:GroceryListAdmin");
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return new ModelAndView("exception");
         }
     }
 
     @RequestMapping(value = "GroceryAdd", method = RequestMethod.GET)
-    public String add(){
+    public String add(@RequestParam(value = "messages", required = false) List<String> messages, Model model)
+    {
+        model.addAttribute("messages",messages);
         return "groceryadd";
     }
 
     @RequestMapping(value = "GroceryAdd", method = RequestMethod.POST)
-    public ModelAndView add(@RequestParam("name") String name, @RequestParam("price") String price,
-                      @RequestParam("quantity") String quantity, Model model){
+    public ModelAndView add(@RequestParam("name") String name,
+                            @RequestParam("price") String price,
+                            @RequestParam("quantity") String quantity,
+                            Model model){
         try {
             groceryService.groceryCreate(name,price,quantity);
             return new ModelAndView("redirect:GroceryListAdmin");
-        } catch (DAOException e) {
+        } catch (GroceryServiceException e) {
             model.addAttribute("message",e.getMessage());
             return new ModelAndView("exception");
+        } catch (FormGroceryException e) {
+            model.addAttribute("messages", e.getExceptionMessage().getMessagesError());
+            return new ModelAndView("redirect:GroceryAdd");
         }
     }
 }

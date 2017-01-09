@@ -1,18 +1,17 @@
-package grocerystore.Services.Concrete;
+package grocerystore.services.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryRole;
-import grocerystore.Domain.Abstract.IRepositoryUser;
-import grocerystore.Domain.Concrete.RoleSql;
-import grocerystore.Domain.Concrete.UserSql;
-import grocerystore.Domain.Entities.Role;
-import grocerystore.Domain.Entities.User;
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Domain.Exceptions.RoleException;
-import grocerystore.Domain.Exceptions.UserException;
-import grocerystore.Services.Abstract.IUserService;
-import grocerystore.Services.Exceptions.FormUserException;
-import grocerystore.Services.Models.Message;
-import grocerystore.Tools.Tool;
+import grocerystore.domain.abstracts.IRepositoryRole;
+import grocerystore.domain.abstracts.IRepositoryUser;
+import grocerystore.domain.entities.Role;
+import grocerystore.domain.entities.User;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.domain.exceptions.RoleException;
+import grocerystore.domain.exceptions.UserException;
+import grocerystore.services.abstracts.IUserService;
+import grocerystore.services.exceptions.FormUserException;
+import grocerystore.services.exceptions.UserServiceException;
+import grocerystore.services.models.Message;
+import grocerystore.tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,22 +37,29 @@ public class UserService implements IUserService {
         this.roleHandler=roleHandler;
     }
 
-    /*public UserService(){
-        this.userHandler = new UserSql();
-        this.roleHandler = new RoleSql();
-    }*/
-
     @Override
     public User formUser(String email, String password, String name,
                          String lastname, String surname, String address,
-                         String phone, String roleName) throws FormUserException, RoleException, UserException {
+                         String phone, String roleName) throws UserServiceException, FormUserException {
 
         Message message = new Message();
         User user = new User();
-        Role roleByName = roleHandler.roleByRoleName(roleName);
+        User userByEmail = null;
+        Role roleByName = null;
+
+        try {
+            roleByName = roleHandler.roleByRoleName(roleName);
+            userByEmail = userHandler.getOneByEmail(email);
+        } catch (UserException e) {
+            logger.error("cant getOneByEmail",e);
+            throw new UserServiceException("Невозможно определить пользователя!",e);
+        } catch (RoleException e) {
+            logger.error("cant role by name",e);
+            throw new UserServiceException("Невозможно определить пользователя!",e);
+        }
 
         if(email.toLowerCase().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")){
-            if(userHandler.getOneByEmail(email)!=null){
+            if(userByEmail!=null){
                 message.addErrorMessage("Пользователь с таким email уже существует в базе!");
                 throw new FormUserException(message);
             }
@@ -91,17 +97,30 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User formUserFromRepo(String email, String password) throws FormUserException, UserException {
+    public User formUserFromRepo(String email, String password) throws UserServiceException, FormUserException {
         //Ищем, что существует юзер с таким email
         Message message = new Message();
+        User user=null;
+        User userByEmail = null;
 
-        User userByEmail = userHandler.getOneByEmail(email);
+        try {
+            userByEmail = userHandler.getOneByEmail(email);
+        } catch (UserException e) {
+            logger.error("cant getOneByEmail",e);
+            throw new UserServiceException("Невозможно проверить пользователя!",e);
+        }
+
         if(userByEmail==null){
             message.addErrorMessage("Пользователь с таким email не найден!");
             throw new FormUserException(message);
         }
 
-        User user = userHandler.getOne(email.toLowerCase(), Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
+        try {
+            user = userHandler.getOne(email.toLowerCase(), Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
+        } catch (UserException e) {
+            logger.error("cant getOn",e);
+            throw new UserServiceException("Невозможно определить пользователя!",e);
+        }
 
         if(user==null){
             message.addErrorMessage("Неверный пароль!");
@@ -113,13 +132,18 @@ public class UserService implements IUserService {
 
     @Override
     public void updateUser(User user, String name, String lastname,
-                           String surname, String address, String phone) throws DAOException {
+                           String surname, String address, String phone) throws UserServiceException {
         user.setName(name);
         user.setLastName(lastname);
         user.setSurName(surname);
         user.setAddress(address);
         user.setPhone(phone);
 
-        userHandler.update(user);
+        try {
+            userHandler.update(user);
+        } catch (DAOException e) {
+            logger.error("cant update user",e);
+            throw new UserServiceException("Невозможно сохранить изменения!",e);
+        }
     }
 }

@@ -1,9 +1,8 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryListGrocery;
-import grocerystore.Domain.Entities.ListGrocery;
-import grocerystore.Domain.Exceptions.ListGroceryException;
-import grocerystore.Tools.DatabaseManager;
+import grocerystore.domain.abstracts.IRepositoryListGrocery;
+import grocerystore.domain.entities.ListGrocery;
+import grocerystore.domain.exceptions.ListGroceryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static grocerystore.Constants.Constants.*;
+import static grocerystore.constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -43,7 +42,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
 
         } catch (SQLException e) {
             logger.error("Cant getall",e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!",e);
         }
         return listGroceries;
     }
@@ -62,7 +61,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne ListGrocery!", e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно получить запись из таблицы связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить запись из таблицы связанных продуктов!",e);
         }
         return listGrocery;
     }
@@ -77,7 +76,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно создать запись в таблице связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно создать запись в таблице связанных продуктов!",e);
         }
         return true;
     }
@@ -90,7 +89,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно удалить запись из таблицы связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно удалить запись из таблицы связанных продуктов!",e);
         }
         return true;
     }
@@ -105,7 +104,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно изменить запись в таблице связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно изменить запись в таблице связанных продуктов!",e);
         }
         return true;
     }
@@ -125,7 +124,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
             resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getListById",e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!",e);
         }
         return listGroceries;
     }
@@ -145,7 +144,7 @@ public class ListGrocerySql extends SQLImplementation implements IRepositoryList
             resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getListByGroceryId",e);
-            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!");
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!",e);
         }
         return listGroceries;
     }

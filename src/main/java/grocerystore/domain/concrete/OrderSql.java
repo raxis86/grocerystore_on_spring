@@ -1,9 +1,8 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryOrder;
-import grocerystore.Domain.Entities.Order;
-import grocerystore.Domain.Exceptions.OrderException;
-import grocerystore.Tools.DatabaseManager;
+import grocerystore.domain.abstracts.IRepositoryOrder;
+import grocerystore.domain.entities.Order;
+import grocerystore.domain.exceptions.OrderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static grocerystore.Constants.Constants.*;
+import static grocerystore.constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -46,7 +45,7 @@ public class OrderSql extends SQLImplementation implements IRepositoryOrder {
             }
         } catch (SQLException e) {
             logger.error("cant getAll",e);
-            throw new OrderException("Проблема с базой данных: невозможно получить записи из таблицы заказов!");
+            throw new OrderException("Проблема с базой данных: невозможно получить записи из таблицы заказов!",e);
         }
         return orderList;
     }
@@ -65,7 +64,7 @@ public class OrderSql extends SQLImplementation implements IRepositoryOrder {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Order!", e);
-            throw new OrderException("Проблема с базой данных: невозможно получить запись из таблицы заказов!");
+            throw new OrderException("Проблема с базой данных: невозможно получить запись из таблицы заказов!",e);
         }
         return order;
     }
@@ -84,7 +83,7 @@ public class OrderSql extends SQLImplementation implements IRepositoryOrder {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            throw new OrderException("Проблема с базой данных: невозможно создать запись в таблице заказов!");
+            throw new OrderException("Проблема с базой данных: невозможно создать запись в таблице заказов!",e);
         }
         return true;
     }
@@ -97,7 +96,7 @@ public class OrderSql extends SQLImplementation implements IRepositoryOrder {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            throw new OrderException("Проблема с базой данных: невозможно удалить запись из таблицы заказов!");
+            throw new OrderException("Проблема с базой данных: невозможно удалить запись из таблицы заказов!",e);
         }
         return true;
     }
@@ -116,7 +115,7 @@ public class OrderSql extends SQLImplementation implements IRepositoryOrder {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            throw new OrderException("Проблема с базой данных: невозможно изменить запись в таблице заказов!");
+            throw new OrderException("Проблема с базой данных: невозможно изменить запись в таблице заказов!",e);
         }
         return true;
     }
@@ -136,7 +135,7 @@ public class OrderSql extends SQLImplementation implements IRepositoryOrder {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getByUserId",e);
-            throw new OrderException("Проблема с базой данных: невозможно получить записи из таблицы заказов!");
+            throw new OrderException("Проблема с базой данных: невозможно получить записи из таблицы заказов!",e);
         }
         return orderList;
     }

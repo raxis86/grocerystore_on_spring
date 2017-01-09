@@ -46,6 +46,10 @@
   </nav>
 </div>
 
+<c:forEach items="${messages}" var="item">
+  <div>${item}</div><br>
+</c:forEach>
+
 <form action="/GroceryEdit" method="post">
   <input type="hidden" name="groceryid" value="${grocery.getId()}">
   Наименование:<div><input type="text" name="name" value="${grocery.getName()}"></div><br>

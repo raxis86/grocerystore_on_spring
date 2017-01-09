@@ -1,4 +1,4 @@
-package grocerystore.Services.Models;
+package grocerystore.services.models;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

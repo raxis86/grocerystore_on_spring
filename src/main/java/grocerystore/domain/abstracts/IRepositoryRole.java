@@ -1,7 +1,7 @@
-package grocerystore.Domain.Abstract;
+package grocerystore.domain.abstracts;
 
-import grocerystore.Domain.Entities.Role;
-import grocerystore.Domain.Exceptions.RoleException;
+import grocerystore.domain.entities.Role;
+import grocerystore.domain.exceptions.RoleException;
 
 import java.util.UUID;
 

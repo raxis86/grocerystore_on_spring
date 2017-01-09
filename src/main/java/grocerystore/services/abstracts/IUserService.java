@@ -1,10 +1,11 @@
-package grocerystore.Services.Abstract;
+package grocerystore.services.abstracts;
 
-import grocerystore.Domain.Entities.User;
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Domain.Exceptions.RoleException;
-import grocerystore.Domain.Exceptions.UserException;
-import grocerystore.Services.Exceptions.FormUserException;
+import grocerystore.domain.entities.User;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.domain.exceptions.RoleException;
+import grocerystore.domain.exceptions.UserException;
+import grocerystore.services.exceptions.FormUserException;
+import grocerystore.services.exceptions.UserServiceException;
 
 /**
  * Created by raxis on 29.12.2016.
@@ -12,8 +13,8 @@ import grocerystore.Services.Exceptions.FormUserException;
 public interface IUserService {
     public User formUser(String email, String password, String name,
                          String lastname, String surname,
-                         String address, String phone, String role) throws FormUserException, RoleException, UserException;
-    public User formUserFromRepo(String email, String password) throws FormUserException, UserException;
+                         String address, String phone, String role) throws UserServiceException, FormUserException;
+    public User formUserFromRepo(String email, String password) throws UserServiceException, FormUserException;
     public void updateUser(User user, String name, String lastname,
-                           String surname, String address, String phone) throws DAOException;
+                           String surname, String address, String phone) throws UserServiceException;
 }

@@ -1,6 +1,6 @@
-package grocerystore.Filters;
+package grocerystore.filters;
 
-import grocerystore.Domain.Entities.Role;
+import grocerystore.domain.entities.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

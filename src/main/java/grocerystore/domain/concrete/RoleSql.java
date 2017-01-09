@@ -1,9 +1,8 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryRole;
-import grocerystore.Domain.Entities.Role;
-import grocerystore.Domain.Exceptions.RoleException;
-import grocerystore.Tools.DatabaseManager;
+import grocerystore.domain.abstracts.IRepositoryRole;
+import grocerystore.domain.entities.Role;
+import grocerystore.domain.exceptions.RoleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static grocerystore.Constants.Constants.*;
+import static grocerystore.constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -37,7 +36,7 @@ public class RoleSql extends SQLImplementation implements IRepositoryRole {
             }
         } catch (SQLException e) {
             logger.error("cant getAll",e);
-            throw new RoleException("Проблема с базой данных: невозможно получить записи из таблицы ролей!");
+            throw new RoleException("Проблема с базой данных: невозможно получить записи из таблицы ролей!",e);
         }
         return roleList;
     }
@@ -58,7 +57,7 @@ public class RoleSql extends SQLImplementation implements IRepositoryRole {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Role!", e);
-            throw new RoleException("Проблема с базой данных: невозможно получить запись из таблицы ролей!");
+            throw new RoleException("Проблема с базой данных: невозможно получить запись из таблицы ролей!",e);
         }
         return role;
     }
@@ -72,7 +71,7 @@ public class RoleSql extends SQLImplementation implements IRepositoryRole {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            throw new RoleException("Проблема с базой данных: невозможно создать запись в таблице ролей!");
+            throw new RoleException("Проблема с базой данных: невозможно создать запись в таблице ролей!",e);
         }
         return true;
     }
@@ -85,7 +84,7 @@ public class RoleSql extends SQLImplementation implements IRepositoryRole {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            throw new RoleException("Проблема с базой данных: невозможно удалить запись из таблицы ролей!");
+            throw new RoleException("Проблема с базой данных: невозможно удалить запись из таблицы ролей!",e);
         }
         return true;
     }
@@ -99,7 +98,7 @@ public class RoleSql extends SQLImplementation implements IRepositoryRole {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            throw new RoleException("Проблема с базой данных: невозможно изменить запись в таблице ролей!");
+            throw new RoleException("Проблема с базой данных: невозможно изменить запись в таблице ролей!",e);
         }
         return true;
     }
@@ -120,7 +119,7 @@ public class RoleSql extends SQLImplementation implements IRepositoryRole {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Role!", e);
-            throw new RoleException("Проблема с базой данных: невозможно получить запись из таблицы ролей!");
+            throw new RoleException("Проблема с базой данных: невозможно получить запись из таблицы ролей!",e);
         }
         return role;
     }

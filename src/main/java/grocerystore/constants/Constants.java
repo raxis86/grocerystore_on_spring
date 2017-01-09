@@ -1,4 +1,4 @@
-package grocerystore.Constants;
+package grocerystore.constants;
 
 import java.util.UUID;
 

@@ -1,25 +1,20 @@
-package grocerystore.Controllers;
+package grocerystore.controllers;
 
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Domain.Exceptions.RoleException;
-import grocerystore.Domain.Exceptions.UserException;
-import grocerystore.Services.Abstract.IAccountService;
-import grocerystore.Services.Abstract.IUserService;
-import grocerystore.Services.Exceptions.FormUserException;
-import grocerystore.Services.Models.AuthUser;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.domain.exceptions.RoleException;
+import grocerystore.domain.exceptions.UserException;
+import grocerystore.services.abstracts.IAccountService;
+import grocerystore.services.abstracts.IUserService;
+import grocerystore.services.exceptions.AccountServiceException;
+import grocerystore.services.exceptions.FormUserException;
+import grocerystore.services.exceptions.UserServiceException;
+import grocerystore.services.models.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created by raxis on 31.12.2016.
@@ -52,10 +47,10 @@ public class AccountController {
         } catch (FormUserException e) {
             model.addAttribute("messages",e.getExceptionMessage().getMessagesError());
             return "login";
-        } catch (UserException e) {
+        } catch (UserServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
-        } catch (DAOException e) {
+        } catch (AccountServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -93,13 +88,10 @@ public class AccountController {
         } catch (FormUserException e) {
             model.addAttribute("messages", e.getExceptionMessage().getMessagesError());
             return "signin";
-        } catch (RoleException e) {
+        } catch (UserServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
-        } catch (UserException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        } catch (DAOException e) {
+        } catch (AccountServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }

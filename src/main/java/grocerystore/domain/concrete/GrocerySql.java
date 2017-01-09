@@ -1,9 +1,8 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryGrocery;
-import grocerystore.Domain.Entities.Grocery;
-import grocerystore.Domain.Exceptions.GroceryException;
-import grocerystore.Tools.DatabaseManager;
+import grocerystore.domain.abstracts.IRepositoryGrocery;
+import grocerystore.domain.entities.Grocery;
+import grocerystore.domain.exceptions.GroceryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static grocerystore.Constants.Constants.*;
+import static grocerystore.constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -41,7 +40,7 @@ public class GrocerySql extends SQLImplementation implements IRepositoryGrocery 
             }
         } catch (SQLException e) {
             logger.error("Cant select List of Grocery",e);
-            throw new GroceryException("Проблема с базой данных: невозможно получить записи из таблицы продуктов!");
+            throw new GroceryException("Проблема с базой данных: невозможно получить записи из таблицы продуктов!",e);
         }
         return groceryList;
     }
@@ -65,7 +64,7 @@ public class GrocerySql extends SQLImplementation implements IRepositoryGrocery 
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Grocery!", e);
-            throw new GroceryException("Проблема с базой данных: невозможно получить запись из таблицы продуктов!");
+            throw new GroceryException("Проблема с базой данных: невозможно получить запись из таблицы продуктов!",e);
         }
         return grocery;
     }
@@ -83,7 +82,7 @@ public class GrocerySql extends SQLImplementation implements IRepositoryGrocery 
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            throw new GroceryException("Проблема с базой данных: невозможно создать запись в таблице продуктов!");
+            throw new GroceryException("Проблема с базой данных: невозможно создать запись в таблице продуктов!",e);
         }
         return true;
     }
@@ -96,7 +95,7 @@ public class GrocerySql extends SQLImplementation implements IRepositoryGrocery 
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            throw new GroceryException("Проблема с базой данных: невозможно удалить запись из таблицы продуктов!");
+            throw new GroceryException("Проблема с базой данных: невозможно удалить запись из таблицы продуктов!",e);
         }
         return true;
     }
@@ -114,7 +113,7 @@ public class GrocerySql extends SQLImplementation implements IRepositoryGrocery 
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            throw new GroceryException("Проблема с базой данных: невозможно изменить запись в таблице продуктов!");
+            throw new GroceryException("Проблема с базой данных: невозможно изменить запись в таблице продуктов!",e);
         }
         return true;
     }

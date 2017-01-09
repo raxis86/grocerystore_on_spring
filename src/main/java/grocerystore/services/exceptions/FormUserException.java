@@ -1,22 +1,16 @@
-package grocerystore.Services.Exceptions;
+package grocerystore.services.exceptions;
 
-import grocerystore.Services.Models.Message;
+import grocerystore.services.models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by raxis on 30.12.2016.
  */
-public class FormUserException extends Exception {
+public class FormUserException extends BusinessLogicException {
     private static final Logger logger = LoggerFactory.getLogger(FormUserException.class);
 
-    private Message message;
-
-    public FormUserException(Message message){
-        this.message=message;
-    }
-
-    public Message getExceptionMessage() {
-        return message;
+    public FormUserException(Message message) {
+        super(message);
     }
 }

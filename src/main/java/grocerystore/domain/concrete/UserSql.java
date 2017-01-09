@@ -1,9 +1,8 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryUser;
-import grocerystore.Domain.Entities.User;
-import grocerystore.Domain.Exceptions.UserException;
-import grocerystore.Tools.DatabaseManager;
+import grocerystore.domain.abstracts.IRepositoryUser;
+import grocerystore.domain.entities.User;
+import grocerystore.domain.exceptions.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static grocerystore.Constants.Constants.*;
+import static grocerystore.constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -50,7 +49,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             }
         } catch (SQLException e) {
             logger.error("Select Users error!",e);
-            throw new UserException("Проблема с базой данных: невозможно получить записи из таблицы пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно получить записи из таблицы пользователей!",e);
         }
         return userList;
     }
@@ -69,7 +68,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User!",e);
-            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!",e);
         }
         return usr;
     }
@@ -91,7 +90,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             statement.execute();
         } catch (SQLException e) {
             logger.error("Insert user error!", e);
-            throw new UserException("Проблема с базой данных: невозможно создать запись в таблице пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно создать запись в таблице пользователей!",e);
         }
         return true;
     }
@@ -104,7 +103,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             statement.execute();
         } catch (SQLException e) {
             logger.error("Cant delete User!",e);
-            throw new UserException("Проблема с базой данных: невозможно удалить запись из таблицы пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно удалить запись из таблицы пользователей!",e);
         }
         return true;
     }
@@ -126,7 +125,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Cant update User!",e);
-            throw new UserException("Проблема с базой данных: невозможно изменить запись в таблице пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно изменить запись в таблице пользователей!",e);
         }
         return true;
     }
@@ -146,7 +145,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User by auth info",e);
-            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!",e);
         }
         return usr;
     }
@@ -165,7 +164,7 @@ public class UserSql extends SQLImplementation implements IRepositoryUser {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User by auth info",e);
-            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!");
+            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!",e);
         }
         return usr;
     }

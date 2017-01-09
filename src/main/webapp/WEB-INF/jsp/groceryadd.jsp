@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -43,6 +44,10 @@
         </ul>
     </nav>
 </div>
+
+<c:forEach items="${messages}" var="item">
+    <div>${item}</div><br>
+</c:forEach>
 
     <form action="/GroceryAdd" method="post">
         Наименование:<input type="text" name="name"><br>

@@ -1,20 +1,22 @@
-package grocerystore.Services.Concrete;
+package grocerystore.services.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryGrocery;
-import grocerystore.Domain.Abstract.IRepositoryListGrocery;
-import grocerystore.Domain.Concrete.ListGrocerySql;
-import grocerystore.Domain.Concrete.GrocerySql;
-import grocerystore.Domain.Entities.Grocery;
-import grocerystore.Domain.Entities.ListGrocery;
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Services.Abstract.IGroceryService;
-import grocerystore.Services.Models.Message;
+import grocerystore.domain.abstracts.IRepositoryGrocery;
+import grocerystore.domain.abstracts.IRepositoryListGrocery;
+import grocerystore.domain.entities.Grocery;
+import grocerystore.domain.entities.ListGrocery;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.domain.exceptions.ListGroceryException;
+import grocerystore.services.abstracts.IGroceryService;
+import grocerystore.services.exceptions.FormGroceryException;
+import grocerystore.services.exceptions.GroceryServiceException;
+import grocerystore.services.models.Message;
 import javafx.util.converter.BigDecimalStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,18 +40,34 @@ public class GroceryService implements IGroceryService {
 
 
     @Override
-    public List<Grocery> getGroceryList() throws DAOException {
-        return groceryHandler.getAll();
+    public List<Grocery> getGroceryList() throws GroceryServiceException {
+        List<Grocery> groceryList=null;
+        try {
+            groceryList=groceryHandler.getAll();
+        } catch (DAOException e) {
+            logger.error("cant getGroceryList ",e);
+            throw new GroceryServiceException("Невозможно получить список продуктов!",e);
+        }
+        return groceryList;
     }
 
     @Override
-    public Grocery getGrocery(String groceryid) throws DAOException {
-        return groceryHandler.getOne(UUID.fromString(groceryid));
+    public Grocery getGrocery(String groceryid) throws GroceryServiceException {
+        Grocery grocery=null;
+        try {
+            grocery=groceryHandler.getOne(UUID.fromString(groceryid));
+        } catch (DAOException e) {
+            logger.error("cant getGrocery",e);
+            throw new GroceryServiceException("Продукт не найлен!",e);
+        }
+        return grocery;
     }
 
     @Override
-    public void groceryCreate(String name, String price, String quantity) throws DAOException {
+    public void groceryCreate(String name, String price, String quantity) throws GroceryServiceException, FormGroceryException {
         Grocery grocery = new Grocery();
+
+        validator(name,price,quantity);
 
         grocery.setId(UUID.randomUUID());
         grocery.setIscategory(false);
@@ -58,35 +76,77 @@ public class GroceryService implements IGroceryService {
         grocery.setPrice(new BigDecimalStringConverter().fromString(price));
         grocery.setQuantity(Integer.parseInt(quantity));
 
-        groceryHandler.create(grocery);
-    }
-
-    @Override
-    public void groceryDelete(String groceryid) throws DAOException {
-        Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
-        List<ListGrocery> listGroceries = listGroceryHandler.getListByGroceryId(grocery.getId());
-
-        groceryHandler.delete(grocery.getId());
-
-        for(ListGrocery gl : listGroceries){
-            listGroceryHandler.delete(gl.getId());
+        try {
+            groceryHandler.create(grocery);
+        } catch (DAOException e) {
+            logger.error("cant groceryCreate",e);
+            throw new GroceryServiceException("Невозможно сохранить новый продукт!",e);
         }
     }
 
     @Override
-    public Message groceryUpdate(String groceryid, String name, String price, String quantity) throws DAOException {
-        Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
+    public void groceryDelete(String groceryid) throws GroceryServiceException {
+        Grocery grocery = null;
+        List<ListGrocery> listGroceries = null;
 
-        if(grocery!=null){
-            grocery.setName(name);
-            grocery.setPrice(new BigDecimalStringConverter().fromString(price));
-            grocery.setQuantity(Integer.parseInt(quantity));
-
-            groceryHandler.update(grocery);
-
-            return new Message("Изменения успешно сохранены!", Message.Status.OK);
+        try {
+            grocery = groceryHandler.getOne(UUID.fromString(groceryid));
+            listGroceries = listGroceryHandler.getListByGroceryId(grocery.getId());
+            groceryHandler.delete(grocery.getId());
+            for(ListGrocery gl : listGroceries){
+                listGroceryHandler.delete(gl.getId());
+            }
+        } catch (ListGroceryException e) {
+            logger.error("cant getListByGeroceryId",e);
+            throw new GroceryServiceException("Невозможно получить список соответствий продуктов!",e);
+        } catch (DAOException e) {
+            logger.error("cant groceryDelete");
+            throw new GroceryServiceException("Невозможно удалить продукт!",e);
         }
 
-        return new Message("Продукт не найден в базе!", Message.Status.ERROR);
     }
+
+    @Override
+    public void groceryUpdate(String groceryid, String name, String price, String quantity) throws GroceryServiceException, FormGroceryException {
+        Grocery grocery = null;
+
+        validator(name,price,quantity);
+
+        try {
+            grocery=groceryHandler.getOne(UUID.fromString(groceryid));
+
+            if(grocery!=null){
+                grocery.setName(name);
+                grocery.setPrice(new BigDecimalStringConverter().fromString(price));
+                grocery.setQuantity(Integer.parseInt(quantity));
+
+                groceryHandler.update(grocery);
+            }
+            else {
+                throw new FormGroceryException(new Message("Продукт не найден в базе!", Message.Status.ERROR));
+            }
+        } catch (DAOException e) {
+            logger.error("cant groceryUpdate",e);
+            throw new GroceryServiceException("Невозможно изменить информацию о продукте!",e);
+        }
+    }
+
+    private void validator(String name, String price, String quantity) throws FormGroceryException {
+        BigDecimal prc = null;
+        Integer q = null;
+        Message message = new Message();
+
+        try {
+            prc=new BigDecimalStringConverter().fromString(price);
+            q = Integer.parseInt(quantity);
+        } catch (NumberFormatException e){
+            logger.error("cant parse parameters",e);
+            message.addErrorMessage("Формат цены или количества неверен!");
+        }
+
+        if("".equals(name)) message.addErrorMessage("Наименование не должно быть пустым!");
+
+        if(!message.isOk())throw new FormGroceryException(message);
+    }
+
 }

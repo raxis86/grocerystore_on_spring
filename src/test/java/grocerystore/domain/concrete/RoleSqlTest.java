@@ -1,6 +1,6 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Entities.Role;
+import grocerystore.domain.entities.Role;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,8 +1,9 @@
-package grocerystore.Controllers;
+package grocerystore.controllers;
 
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Services.Abstract.ICartService;
-import grocerystore.Services.Models.Cart;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.services.abstracts.ICartService;
+import grocerystore.services.exceptions.CartServiceException;
+import grocerystore.services.models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class CartController {
         try {
             cartService.addToCart(cart,groceryid);
             return new ModelAndView("redirect:GroceryList");
-        } catch (DAOException e) {
+        } catch (CartServiceException e) {
             model.addAttribute("message",e.getMessage());
             return new ModelAndView("exception");
         }
@@ -64,7 +65,7 @@ public class CartController {
         try {
             cartService.removeFromCart(cart,groceryid);
             return new ModelAndView("redirect:CartList");
-        } catch (DAOException e) {
+        } catch (CartServiceException e) {
             model.addAttribute("message",e.getMessage());
             return new ModelAndView("exception");
         }

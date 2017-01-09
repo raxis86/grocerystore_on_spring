@@ -1,8 +1,7 @@
-package grocerystore.Domain.Abstract;
+package grocerystore.domain.abstracts;
 
-import grocerystore.Domain.Exceptions.DAOException;
+import grocerystore.domain.exceptions.DAOException;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**

@@ -1,4 +1,4 @@
-package grocerystore.Domain.Exceptions;
+package grocerystore.domain.exceptions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class OrderStatusException extends DAOException{
     private static final Logger logger = LoggerFactory.getLogger(OrderStatusException.class);
 
-    public OrderStatusException(String message) {
-        super(message);
+    public OrderStatusException(String message, Exception e) {
+        super(message,e);
     }
 }

@@ -1,11 +1,14 @@
-package grocerystore.Controllers;
+package grocerystore.controllers;
 
-import grocerystore.Domain.Entities.User;
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Services.Abstract.IListGroceryService;
-import grocerystore.Services.Abstract.IOrderService;
-import grocerystore.Services.Abstract.IUserService;
-import grocerystore.Services.Models.Cart;
+import grocerystore.domain.entities.User;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.services.abstracts.IListGroceryService;
+import grocerystore.services.abstracts.IOrderService;
+import grocerystore.services.abstracts.IUserService;
+import grocerystore.services.exceptions.ListGroceryServiceException;
+import grocerystore.services.exceptions.OrderServiceException;
+import grocerystore.services.exceptions.UserServiceException;
+import grocerystore.services.models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +44,7 @@ public class OrderController {
             try {
                 model.addAttribute("orderlist",orderService.formOrderViewList(user));
                 return "orderlist";
-            } catch (DAOException e) {
+            } catch (OrderServiceException e) {
                 model.addAttribute("message",e.getMessage());
                 return "exception";
             }
@@ -56,7 +59,7 @@ public class OrderController {
         try {
             orderService.updateOrder(orderid);
             return new ModelAndView("redirect:OrderList");
-        } catch (DAOException e) {
+        } catch (OrderServiceException e) {
             model.addAttribute("message",e.getMessage());
             return new ModelAndView("exception");
         }
@@ -67,7 +70,7 @@ public class OrderController {
         try {
             model.addAttribute("orderlist",orderService.formOrderViewListAdmin());
             return "orderlist_admin";
-        } catch (DAOException e) {
+        } catch (OrderServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -78,7 +81,7 @@ public class OrderController {
         try {
             model.addAttribute("order",orderService.formOrderView(orderid));
             return "orderedit";
-        } catch (DAOException e) {
+        } catch (OrderServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -90,7 +93,7 @@ public class OrderController {
             orderService.updateOrderAdmin(orderid,statusid);
             model.addAttribute("orderlist",orderService.formOrderViewListAdmin());
             return "orderlist_admin";
-        } catch (DAOException e) {
+        } catch (OrderServiceException e) {
             model.addAttribute("message",e.getMessage());
             return "exception";
         }
@@ -120,7 +123,13 @@ public class OrderController {
                 listGroceryService.createListGrocery(cart,orderService.createOrder(user,cart));
                 cart.clear();
                 return "ordersuccess";
-            } catch (DAOException e) {
+            } catch (ListGroceryServiceException e) {
+                model.addAttribute("message",e.getMessage());
+                return "exception";
+            } catch (OrderServiceException e) {
+                model.addAttribute("message",e.getMessage());
+                return "exception";
+            } catch (UserServiceException e) {
                 model.addAttribute("message",e.getMessage());
                 return "exception";
             }

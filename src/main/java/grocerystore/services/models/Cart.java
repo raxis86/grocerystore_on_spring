@@ -1,6 +1,6 @@
-package grocerystore.Services.Models;
+package grocerystore.services.models;
 
-import grocerystore.Domain.Entities.Grocery;
+import grocerystore.domain.entities.Grocery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

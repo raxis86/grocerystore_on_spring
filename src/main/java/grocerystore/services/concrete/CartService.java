@@ -1,11 +1,11 @@
-package grocerystore.Services.Concrete;
+package grocerystore.services.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryGrocery;
-import grocerystore.Domain.Concrete.GrocerySql;
-import grocerystore.Domain.Entities.Grocery;
-import grocerystore.Domain.Exceptions.DAOException;
-import grocerystore.Services.Abstract.ICartService;
-import grocerystore.Services.Models.Cart;
+import grocerystore.domain.abstracts.IRepositoryGrocery;
+import grocerystore.domain.entities.Grocery;
+import grocerystore.domain.exceptions.DAOException;
+import grocerystore.services.abstracts.ICartService;
+import grocerystore.services.exceptions.CartServiceException;
+import grocerystore.services.models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,16 @@ public class CartService implements ICartService {
      * @param groceryid - код продукта
      */
     @Override
-    public void addToCart(Cart cart, String groceryid) throws DAOException {
-        Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
+    public void addToCart(Cart cart, String groceryid) throws CartServiceException {
+        Grocery grocery = null;
+
+        try {
+            grocery = groceryHandler.getOne(UUID.fromString(groceryid));
+        } catch (DAOException e) {
+            logger.error("cant grocery.getOne",e);
+            throw new CartServiceException("Невозможно добавить продукт в корзину!",e);
+        }
+
         if(grocery!=null){
             cart.addItem(grocery,1);
         }
@@ -51,8 +59,14 @@ public class CartService implements ICartService {
      * @param groceryid
      */
     @Override
-    public void removeFromCart(Cart cart, String groceryid) throws DAOException {
-        Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
+    public void removeFromCart(Cart cart, String groceryid) throws CartServiceException {
+        Grocery grocery = null;
+        try {
+            grocery = groceryHandler.getOne(UUID.fromString(groceryid));
+        } catch (DAOException e) {
+            logger.error("cant grocery.getOne",e);
+            throw new CartServiceException("Невозможно удалить продукт из корзины!",e);
+        }
         if(grocery!=null){
             cart.removeItem(grocery);
         }

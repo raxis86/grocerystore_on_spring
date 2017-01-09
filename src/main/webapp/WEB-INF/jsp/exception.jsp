@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -46,7 +47,16 @@
     </div>
 
 
-    <H2>${!message}</H2>
+    <%--<H2>${message.replaceAll("(\\r\\n|\\n)", "<br />")}</H2>--%>
+
+    <c:set var="newLine" value="(\\r\\n|\\n)" />
+    <c:set var="splitMessage" value="${message.split(newLine)}" />
+
+    <H2>${splitMessage[0]}</H2>
+
+    <c:forEach var="i" begin="1" end="${fn:length(splitMessage)}">
+        <c:out value="${splitMessage[i]}"/><br>
+    </c:forEach>
 
 </body>
 </html>

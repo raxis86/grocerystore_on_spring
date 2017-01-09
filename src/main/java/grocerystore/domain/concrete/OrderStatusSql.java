@@ -1,9 +1,8 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryOrderStatus;
-import grocerystore.Domain.Entities.OrderStatus;
-import grocerystore.Domain.Exceptions.OrderStatusException;
-import grocerystore.Tools.DatabaseManager;
+import grocerystore.domain.abstracts.IRepositoryOrderStatus;
+import grocerystore.domain.entities.OrderStatus;
+import grocerystore.domain.exceptions.OrderStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static grocerystore.Constants.Constants.*;
+import static grocerystore.constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -37,7 +36,7 @@ public class OrderStatusSql extends SQLImplementation implements IRepositoryOrde
             }
         } catch (SQLException e) {
             logger.error("cant gelAll",e);
-            throw new OrderStatusException("Проблема с базой данных: невозможно получить записи из таблицы статусов!");
+            throw new OrderStatusException("Проблема с базой данных: невозможно получить записи из таблицы статусов!",e);
         }
         return orderStatusList;
     }
@@ -57,7 +56,7 @@ public class OrderStatusSql extends SQLImplementation implements IRepositoryOrde
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne OrderStatusSql!", e);
-            throw new OrderStatusException("Проблема с базой данных: невозможно получить запись из таблицы статусов!");
+            throw new OrderStatusException("Проблема с базой данных: невозможно получить запись из таблицы статусов!",e);
         }
         return orderStatus;
     }
@@ -71,7 +70,7 @@ public class OrderStatusSql extends SQLImplementation implements IRepositoryOrde
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            throw new OrderStatusException("Проблема с базой данных: невозможно создать запись в таблице статусов!");
+            throw new OrderStatusException("Проблема с базой данных: невозможно создать запись в таблице статусов!",e);
         }
         return true;
     }
@@ -84,7 +83,7 @@ public class OrderStatusSql extends SQLImplementation implements IRepositoryOrde
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            throw new OrderStatusException("Проблема с базой данных: невозможно удалить запись в таблице статусов!");
+            throw new OrderStatusException("Проблема с базой данных: невозможно удалить запись в таблице статусов!",e);
         }
         return true;
     }
@@ -98,7 +97,7 @@ public class OrderStatusSql extends SQLImplementation implements IRepositoryOrde
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            throw new OrderStatusException("Проблема с базой данных: невозможно изменить запись в таблице статусов!");
+            throw new OrderStatusException("Проблема с базой данных: невозможно изменить запись в таблице статусов!",e);
         }
         return true;
     }

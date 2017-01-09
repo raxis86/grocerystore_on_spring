@@ -1,6 +1,6 @@
-package grocerystore.Domain.Abstract;
+package grocerystore.domain.abstracts;
 
-import grocerystore.Domain.Entities.OrderStatus;
+import grocerystore.domain.entities.OrderStatus;
 
 import java.util.UUID;
 

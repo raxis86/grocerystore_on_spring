@@ -1,11 +1,7 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Tools.DatabaseManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import grocerystore.tools.DatabaseManager;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**

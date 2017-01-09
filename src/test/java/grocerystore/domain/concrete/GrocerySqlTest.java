@@ -1,14 +1,12 @@
-package grocerystore.Domain.Concrete;
+package grocerystore.domain.concrete;
 
-import grocerystore.Domain.Abstract.IRepositoryGrocery;
-import grocerystore.Domain.Entities.Grocery;
+import grocerystore.domain.entities.Grocery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static grocerystore.Constants.Constants.GROCERY_SELECTALL_QUERY;
 import static org.junit.Assert.*;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -20,7 +18,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

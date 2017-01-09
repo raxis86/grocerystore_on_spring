@@ -133,7 +133,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet-mapping>
     <servlet>
         <servlet-name>MappingError</servlet-name>
-        <servlet-class>grocerystore.Controllers.MappingError</servlet-class>
+        <servlet-class>grocerystore.controllers.MappingError</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MappingError</servlet-name>
@@ -144,7 +144,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
     <filter>
         <filter-name>AuthorizationFilter</filter-name>
-        <filter-class>grocerystore.Filters.AuthorizationFilter</filter-class>
+        <filter-class>grocerystore.filters.AuthorizationFilter</filter-class>
         <init-param>
             <param-name>test-param</param-name>
             <param-value>This parameter is for testing.</param-value>
@@ -152,7 +152,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </filter>
     <filter>
         <filter-name>AdminFilter</filter-name>
-        <filter-class>grocerystore.Filters.AdminFilter</filter-class>
+        <filter-class>grocerystore.filters.AdminFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>AuthorizationFilter</filter-name>
