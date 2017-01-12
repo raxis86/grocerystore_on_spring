@@ -9,12 +9,15 @@ import grocerystore.domain.exceptions.ListGroceryException;
 import grocerystore.services.abstracts.IGroceryService;
 import grocerystore.services.exceptions.FormGroceryException;
 import grocerystore.services.exceptions.GroceryServiceException;
+import grocerystore.services.exceptions.ValidateException;
 import grocerystore.services.models.Message;
+import grocerystore.services.validators.abstracts.IValidator;
 import javafx.util.converter.BigDecimalStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,18 +27,26 @@ import java.util.UUID;
  * Created by raxis on 29.12.2016.
  * Работа с продуктами
  */
-@Component
+@Service
 public class GroceryService implements IGroceryService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);
 
-    @Autowired
     private IRepositoryGrocery groceryHandler;
-    @Autowired
     private IRepositoryListGrocery listGroceryHandler;
+    private IValidator groceryNameValidator;
+    private IValidator priceValidator;
+    private IValidator quantityValidator;
 
-    public GroceryService(IRepositoryGrocery groceryHandler, IRepositoryListGrocery listGroceryHandler){
+    public GroceryService(IRepositoryGrocery groceryHandler,
+                          IRepositoryListGrocery listGroceryHandler,
+                          IValidator groceryNameValidator,
+                          IValidator priceValidator,
+                          IValidator quantityValidator){
         this.groceryHandler = groceryHandler;
         this.listGroceryHandler = listGroceryHandler;
+        this.groceryNameValidator=groceryNameValidator;
+        this.priceValidator=priceValidator;
+        this.quantityValidator=quantityValidator;
     }
 
 
@@ -66,8 +77,27 @@ public class GroceryService implements IGroceryService {
     @Override
     public void groceryCreate(String name, String price, String quantity) throws GroceryServiceException, FormGroceryException {
         Grocery grocery = new Grocery();
+        Message message = new Message();
 
-        validator(name,price,quantity);
+        try {
+            groceryNameValidator.validate(name);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+        try {
+            priceValidator.validate(price);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+        try {
+            quantityValidator.validate(quantity);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+
+        if(!message.isOk()){
+            throw new FormGroceryException(message);
+        }
 
         grocery.setId(UUID.randomUUID());
         grocery.setIscategory(false);
@@ -109,8 +139,27 @@ public class GroceryService implements IGroceryService {
     @Override
     public void groceryUpdate(String groceryid, String name, String price, String quantity) throws GroceryServiceException, FormGroceryException {
         Grocery grocery = null;
+        Message message = new Message();
 
-        validator(name,price,quantity);
+        try {
+            groceryNameValidator.validate(name);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+        try {
+            priceValidator.validate(price);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+        try {
+            quantityValidator.validate(quantity);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+
+        if(!message.isOk()){
+            throw new FormGroceryException(message);
+        }
 
         try {
             grocery=groceryHandler.getOne(UUID.fromString(groceryid));
@@ -129,24 +178,6 @@ public class GroceryService implements IGroceryService {
             logger.error("cant groceryUpdate",e);
             throw new GroceryServiceException("Невозможно изменить информацию о продукте!",e);
         }
-    }
-
-    private void validator(String name, String price, String quantity) throws FormGroceryException {
-        BigDecimal prc = null;
-        Integer q = null;
-        Message message = new Message();
-
-        try {
-            prc=new BigDecimalStringConverter().fromString(price);
-            q = Integer.parseInt(quantity);
-        } catch (NumberFormatException e){
-            logger.error("cant parse parameters",e);
-            message.addErrorMessage("Формат цены или количества неверен!");
-        }
-
-        if("".equals(name)) message.addErrorMessage("Наименование не должно быть пустым!");
-
-        if(!message.isOk())throw new FormGroceryException(message);
     }
 
 }

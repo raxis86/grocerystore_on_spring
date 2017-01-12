@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class CartController {
     private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
-    @Autowired
     private ICartService cartService;
 
     public CartController(ICartService cartService){
@@ -46,29 +45,17 @@ public class CartController {
     }
 
     @RequestMapping(value = "CartAdd", method = RequestMethod.POST)
-    public ModelAndView add(@ModelAttribute("cart") Cart cart, @RequestParam("groceryid") String groceryid, Model model){
-/*        if(cart==null){
-            cart=new Cart();
-            model.addAttribute("cart",cart);
-        }*/
-        try {
-            cartService.addToCart(cart,groceryid);
-            return new ModelAndView("redirect:GroceryList");
-        } catch (CartServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return new ModelAndView("exception");
-        }
+    public ModelAndView add(@ModelAttribute("cart") Cart cart, @RequestParam("groceryid") String groceryid)
+                            throws CartServiceException {
+        cartService.addToCart(cart,groceryid);
+        return new ModelAndView("redirect:GroceryList");
     }
 
     @RequestMapping(value = "CartRemove", method = RequestMethod.POST)
-    public ModelAndView remove(@ModelAttribute("cart") Cart cart, @RequestParam("groceryid") String groceryid, Model model){
-        try {
-            cartService.removeFromCart(cart,groceryid);
-            return new ModelAndView("redirect:CartList");
-        } catch (CartServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return new ModelAndView("exception");
-        }
+    public ModelAndView remove(@ModelAttribute("cart") Cart cart, @RequestParam("groceryid") String groceryid)
+                               throws CartServiceException {
+        cartService.removeFromCart(cart,groceryid);
+        return new ModelAndView("redirect:CartList");
     }
 
 }

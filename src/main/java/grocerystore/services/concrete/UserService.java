@@ -10,31 +10,44 @@ import grocerystore.domain.exceptions.UserException;
 import grocerystore.services.abstracts.IUserService;
 import grocerystore.services.exceptions.FormUserException;
 import grocerystore.services.exceptions.UserServiceException;
+import grocerystore.services.exceptions.ValidateException;
 import grocerystore.services.models.Message;
+import grocerystore.services.validators.abstracts.IValidator;
 import grocerystore.tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 /**
  * Created by raxis on 29.12.2016.
  */
-@Component
+@Service
 public class UserService implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
     private IRepositoryUser userHandler;
-    @Autowired
     private IRepositoryRole roleHandler;
+    private IValidator nameValidator;
+    private IValidator addressValidator;
+    private IValidator passwordValidator;
+    private IValidator emailValidator;
 
     public UserService(IRepositoryUser userHandler,
-                       IRepositoryRole roleHandler){
+                       IRepositoryRole roleHandler,
+                       IValidator nameValidator,
+                       IValidator addressValidator,
+                       IValidator passwordValidator,
+                       IValidator emailValidator){
         this.userHandler=userHandler;
         this.roleHandler=roleHandler;
+        this.nameValidator=nameValidator;
+        this.addressValidator=addressValidator;
+        this.passwordValidator=passwordValidator;
+        this.emailValidator=emailValidator;
     }
 
     @Override
@@ -58,23 +71,29 @@ public class UserService implements IUserService {
             throw new UserServiceException("Невозможно определить пользователя!",e);
         }
 
-        if(email.toLowerCase().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")){
-            if(userByEmail!=null){
-                message.addErrorMessage("Пользователь с таким email уже существует в базе!");
-                throw new FormUserException(message);
-            }
-        }
-        else {
-            message.addErrorMessage("email некорректен!");
+
+        try {
+            emailValidator.validate(email);
+            passwordValidator.validate(password);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
         }
 
-        if(password.length()<6){
-            message.addErrorMessage("длина пароля должна быть не менее 6 символов");
+        try {
+            nameValidator.validate(name);
+            nameValidator.validate(lastname);
+            nameValidator.validate(surname);
+            addressValidator.validate(address);
+        } catch (ValidateException e) {
+            message.addErrorMessage(e.getMessage());
+        }
+
+        if(userByEmail!=null){
+            message.addErrorMessage("Пользователь с таким email уже существует в базе!");
         }
 
         if(roleByName==null){
             message.addErrorMessage("Роли с таким наименованием не существует!");
-            throw new FormUserException(message);
         }
 
         if(message.isOk()){
@@ -133,6 +152,13 @@ public class UserService implements IUserService {
     @Override
     public void updateUser(User user, String name, String lastname,
                            String surname, String address, String phone) throws UserServiceException {
+        try {
+            nameValidator.validate(name);
+            nameValidator.validate(lastname);
+            addressValidator.validate(address);
+        } catch (ValidateException e) {
+            throw new UserServiceException(e.getMessage(),e);
+        }
         user.setName(name);
         user.setLastName(lastname);
         user.setSurName(surname);

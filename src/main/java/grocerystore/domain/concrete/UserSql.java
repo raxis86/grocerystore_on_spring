@@ -6,6 +6,7 @@ import grocerystore.domain.exceptions.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import static grocerystore.constants.Constants.*;
  * Created by raxis on 27.12.2016.
  * Реализакция DAO для работы с user в MySQL
  */
-@Component
+@Repository
 public class UserSql extends SQLImplementation implements IRepositoryUser {
     private static final Logger logger = LoggerFactory.getLogger(UserSql.class);
 

@@ -13,25 +13,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 /**
  * Created by raxis on 29.12.2016.
  */
-@Component
+@Service
 public class OrderService implements IOrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    @Autowired
     private IRepositoryOrder orderHandler;
-    @Autowired
     private IRepositoryOrderStatus orderStatusHandler;
-    @Autowired
     private IRepositoryListGrocery listGroceryHandler;
-    @Autowired
     private IRepositoryGrocery groceryHandler;
-    @Autowired
     private IRepositoryUser userHandler;
 
     public OrderService(IRepositoryOrder orderHandler,

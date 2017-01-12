@@ -11,6 +11,9 @@
 <head>
     <title>Регистрация</title>
 </head>
+<ul id="menu">
+    <li><a href="/Index">Главная</a></li>
+</ul>
 <body>
     <c:forEach items="${messages}" var="item">
         <div>${item}</div><br>

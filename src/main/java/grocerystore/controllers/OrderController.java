@@ -25,11 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    @Autowired
     private IOrderService orderService;
-    @Autowired
     private IListGroceryService listGroceryService;
-    @Autowired
     private IUserService userService;
 
     public OrderController(IOrderService orderService,IListGroceryService listGroceryService,IUserService userService){
@@ -39,64 +36,46 @@ public class OrderController {
     }
 
     @RequestMapping(value = "OrderList", method = RequestMethod.GET)
-    public String list(@ModelAttribute("user") User user, Model model){
+    public String list(@ModelAttribute("user") User user, Model model)
+                       throws OrderServiceException {
         if(user!=null){
-            try {
-                model.addAttribute("orderlist",orderService.formOrderViewList(user));
-                return "orderlist";
-            } catch (OrderServiceException e) {
-                model.addAttribute("message",e.getMessage());
-                return "exception";
-            }
+            model.addAttribute("orderlist",orderService.formOrderViewList(user));
+            return "orderlist";
         }
         else {
-             return "deadend";
+            return "deadend";
         }
     }
 
     @RequestMapping(value = "OrderList", method = RequestMethod.POST)
-    public ModelAndView list(@RequestParam("orderid") String orderid, Model model){
-        try {
-            orderService.updateOrder(orderid);
-            return new ModelAndView("redirect:OrderList");
-        } catch (OrderServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return new ModelAndView("exception");
-        }
+    public ModelAndView list(@RequestParam("orderid") String orderid)
+                             throws OrderServiceException {
+
+        orderService.updateOrder(orderid);
+        return new ModelAndView("redirect:OrderList");
     }
 
     @RequestMapping(value = "OrderListAdmin", method = RequestMethod.GET)
-    public String listAdmin(Model model){
-        try {
-            model.addAttribute("orderlist",orderService.formOrderViewListAdmin());
-            return "orderlist_admin";
-        } catch (OrderServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        }
+    public String listAdmin(Model model) throws OrderServiceException {
+
+        model.addAttribute("orderlist",orderService.formOrderViewListAdmin());
+        return "orderlist_admin";
     }
 
     @RequestMapping(value = "OrderEdit", method = RequestMethod.GET)
-    public String edit(@RequestParam("orderid") String orderid, Model model){
-        try {
-            model.addAttribute("order",orderService.formOrderView(orderid));
-            return "orderedit";
-        } catch (OrderServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        }
+    public String edit(@RequestParam("orderid") String orderid, Model model)
+                        throws OrderServiceException {
+
+        model.addAttribute("order",orderService.formOrderView(orderid));
+        return "orderedit";
     }
 
     @RequestMapping(value = "OrderEdit", method = RequestMethod.POST)
-    public String edit(@RequestParam("orderid") String orderid,@RequestParam("statusid") String statusid,Model model){
-        try {
-            orderService.updateOrderAdmin(orderid,statusid);
-            model.addAttribute("orderlist",orderService.formOrderViewListAdmin());
-            return "orderlist_admin";
-        } catch (OrderServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        }
+    public String edit(@RequestParam("orderid") String orderid,@RequestParam("statusid") String statusid,Model model)
+                       throws OrderServiceException {
+        orderService.updateOrderAdmin(orderid,statusid);
+        model.addAttribute("orderlist",orderService.formOrderViewListAdmin());
+        return "orderlist_admin";
     }
 
     @RequestMapping(value = "OrderAdd", method = RequestMethod.GET)
@@ -116,23 +95,16 @@ public class OrderController {
     public String add(@ModelAttribute("user") User user,@ModelAttribute("cart") Cart cart,
                       @RequestParam("name") String name, @RequestParam("lastname") String lastname,
                       @RequestParam("surname") String surname, @RequestParam("address") String address,
-                      @RequestParam("phone") String phone, Model model){
+                      @RequestParam("phone") String phone)
+                      throws UserServiceException,
+                             OrderServiceException,
+                             ListGroceryServiceException {
+
         if((cart!=null)&&(user!=null)){
-            try {
-                userService.updateUser(user,name,lastname,surname,address,phone);
-                listGroceryService.createListGrocery(cart,orderService.createOrder(user,cart));
-                cart.clear();
-                return "ordersuccess";
-            } catch (ListGroceryServiceException e) {
-                model.addAttribute("message",e.getMessage());
-                return "exception";
-            } catch (OrderServiceException e) {
-                model.addAttribute("message",e.getMessage());
-                return "exception";
-            } catch (UserServiceException e) {
-                model.addAttribute("message",e.getMessage());
-                return "exception";
-            }
+            userService.updateUser(user,name,lastname,surname,address,phone);
+            listGroceryService.createListGrocery(cart,orderService.createOrder(user,cart));
+            cart.clear();
+            return "ordersuccess";
         }
         else {
             return "index";

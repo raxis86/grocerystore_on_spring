@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
@@ -19,20 +20,15 @@ import java.util.Map;
  * Created by raxis on 29.12.2016.
  * Работа со списком продуктов в заказе
  */
-@Component
+@Service
 public class ListGroceryService implements IListGroceryService {
     private static final Logger logger = LoggerFactory.getLogger(ListGroceryService.class);
 
-    @Autowired
     private IRepositoryListGrocery listGroceryHandler;
 
     public ListGroceryService(IRepositoryListGrocery listGroceryHandler){
         this.listGroceryHandler=listGroceryHandler;
     }
-
-    /*public ListGroceryService(){
-        this.listGroceryHandler = new ListGrocerySql();
-    }*/
 
 
     /**

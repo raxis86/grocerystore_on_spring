@@ -28,8 +28,6 @@ public class DatabaseManager {
     }
 
     public static Connection getConnection() throws SQLException {
-        //ic = new InitialContext();
-        //ds = (DataSource) ic.lookup("java:comp/env/jdbc/mysqldb");
         return  ds.getConnection();
     }
 

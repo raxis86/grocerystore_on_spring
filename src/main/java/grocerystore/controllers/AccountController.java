@@ -11,10 +11,13 @@ import grocerystore.services.exceptions.UserServiceException;
 import grocerystore.services.models.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by raxis on 31.12.2016.
@@ -32,36 +35,27 @@ public class AccountController {
         this.userService=userService;
     }
 
-    //@GetMapping("/Login")
     @RequestMapping(value = "Login", method = RequestMethod.GET)
     public String login(){
         return "login";
     }
 
-    //@PostMapping("/Login")
     @RequestMapping(value = "Login", method = RequestMethod.POST)
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model)
+                  throws UserServiceException, FormUserException, AccountServiceException {
+
         AuthUser authUser=null;
-        try {
-            authUser=accountService.logIn(userService.formUserFromRepo(email,password));
-        } catch (FormUserException e) {
-            model.addAttribute("messages",e.getExceptionMessage().getMessagesError());
-            return "login";
-        } catch (UserServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        } catch (AccountServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        }
+
+        authUser=accountService.logIn(userService.formUserFromRepo(email,password));
 
         if(authUser!=null){
             model.addAttribute("user",authUser.getUser());
             model.addAttribute("role",authUser.getRole());
             return "index";
         }
-
-        return "login";
+        else {
+            return "login";
+        }
     }
 
     @RequestMapping(value = "Logout", method = RequestMethod.GET)
@@ -79,27 +73,19 @@ public class AccountController {
     public String signin(@RequestParam("email") String email, @RequestParam("password") String password,
                          @RequestParam("name") String name, @RequestParam("lastname") String lastname,
                          @RequestParam("surname") String surname, @RequestParam("phone") String phone,
-                         @RequestParam("address") String address, Model model){
+                         @RequestParam("address") String address)
+                         throws UserServiceException, FormUserException, AccountServiceException {
 
-        AuthUser authUser=null;
-        try {
-            authUser = accountService.signIn(userService.formUser(email,password,name,lastname,
-                                                                  surname,address,phone,"user"));
-        } catch (FormUserException e) {
-            model.addAttribute("messages", e.getExceptionMessage().getMessagesError());
-            return "signin";
-        } catch (UserServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        } catch (AccountServiceException e) {
-            model.addAttribute("message",e.getMessage());
-            return "exception";
-        }
+        AuthUser authUser;
+
+        authUser = accountService.signIn(userService.formUser(email,password,name,lastname,
+                surname,address,phone,"user"));
 
         if(authUser!=null){
             return "signinsuccess";
         }
-
-        return "signin";
+        else {
+            return "signin";
+        }
     }
 }

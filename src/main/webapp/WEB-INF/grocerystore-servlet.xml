@@ -9,18 +9,13 @@
         http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:annotation-config/>
-    <!--<context:component-scan base-package="grocerystore.controllers"/>-->
+
     <context:component-scan base-package="grocerystore"/>
 
 
 
     <bean class="org.springframework.http.converter.StringHttpMessageConverter">
         <constructor-arg value="UTF-8" /></bean>
-
-    <!--<jdbc:embedded-database id="dataSource" type="H2">
-        <jdbc:script location="/db/create_db.sql" />
-        <jdbc:script location="/db/insert_db.sql" />
-    </jdbc:embedded-database>-->
 
 
     <bean id="viewResolver"

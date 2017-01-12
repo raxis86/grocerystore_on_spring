@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
@@ -17,11 +18,10 @@ import java.util.UUID;
  * Created by raxis on 29.12.2016.
  * Класс для работы с корзиной покупок
  */
-@Component
+@Service
 public class CartService implements ICartService {
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
-    @Autowired
     private IRepositoryGrocery groceryHandler;
 
     public CartService(IRepositoryGrocery groceryHandler){
